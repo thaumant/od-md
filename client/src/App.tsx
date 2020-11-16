@@ -14,9 +14,8 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <header className="App-header">
-          <UserList />
-        </header>
+        <img className="App-logo" src={logo} />
+        <UserList />
       </div>
     </ApolloProvider>
   );

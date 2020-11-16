@@ -1,12 +1,7 @@
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
-
-interface User {
-  id: number;
-  name: string;
-  shortBio: string;
-  isVerified: boolean;
-}
+import { User } from '../types';
+import { UserCard } from './UserCard';
 
 interface UserData {
   Users: User[];
@@ -16,45 +11,30 @@ interface UserVars {
   name: string;
 }
 
-const GET_ROCKET_INVENTORY = gql`
+const GET_USERS = gql`
   query GetUsers {
     Users {
       id
       name
       shortBio
       isVerified
+      photoUrl
     }
   }
 `;
 
 export function UserList() {
-  const { loading, data } = useQuery<UserData, UserVars>(
-    GET_ROCKET_INVENTORY,
-    {}
-  );
+  const { loading, data } = useQuery<UserData, UserVars>(GET_USERS, {});
   return (
-    <div>
-      <h3>Users</h3>
+    <>
+      <h1>Users</h1>
       {loading ? (
         <p>Loading ...</p>
       ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>ShortBio</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data && data.Users.map(user => (
-                <tr>
-                  <td>{user.name}</td>
-                  <td>{user.shortBio}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div>{data && data.Users.map(user =>(
+            <UserCard key={user.id} {...user} />
+          ))}</div>
         )}
-    </div>
+    </>
   );
 }

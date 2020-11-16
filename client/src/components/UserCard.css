@@ -1,0 +1,16 @@
+.UserCard {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+.UserCard-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-right: 20px;
+}
+
+.UserCard-name {
+    font-size: 24px;
+}
