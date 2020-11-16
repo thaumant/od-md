@@ -8,6 +8,10 @@ const users: DeepPartial<User>[] = [
   { id: "3", name: "Cesar Julio", shortBio: "I later born.", isVerified: true },
 ];
 
+for (const user of users) {
+  user.photoUrl = `https://avatars.dicebear.com/api/human/${user.id}.svg`;
+}
+
 const seed = async () => {
   try {
     console.log("[seed] : running...");
