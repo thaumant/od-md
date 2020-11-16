@@ -1,7 +1,7 @@
-import { createConnection } from "typeorm";
+import { createConnection, Repository } from "typeorm";
 import { User } from "../entities/User";
 
-export const connectDatabase = async (): Promise<any> => {
+export const connectDatabase = async (): Promise<{users: Repository<User>}> => {
   const connection = await createConnection();
 
   return {
