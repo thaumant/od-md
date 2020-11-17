@@ -5,10 +5,10 @@ import "./UserCard.css";
 export function UserCard({id, name, shortBio, photoUrl}: User) {
   return (
     <div className="UserCard">
-      <div className="UserCard-avatar">
+      <div className="UserCard-photo">
         <img src={photoUrl} />
       </div>
-      <div className="UserCard-text">
+      <div className="UserCard-profile">
         <div className="UserCard-name">{name}</div>
         <div className="UserCard-bio">{shortBio}</div>
       </div>

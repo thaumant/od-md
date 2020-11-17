@@ -3,6 +3,8 @@ import { useQuery, gql } from '@apollo/client';
 import { User } from '../types';
 import { UserCard } from './UserCard';
 
+import "./UserList.css";
+
 interface UserData {
   Users: User[];
 }
@@ -31,7 +33,7 @@ export function UserList() {
       {loading ? (
         <p>Loading ...</p>
       ) : (
-          <div>{data && data.Users.map(user =>(
+          <div className="UserList">{data && data.Users.map(user =>(
             <UserCard key={user.id} {...user} />
           ))}</div>
         )}

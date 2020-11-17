@@ -1,29 +1,41 @@
+import faker from "faker"
 import { connectDatabase } from "./index";
 import { User } from '../entities/User';
 import { DeepPartial } from "typeorm";
 
-const users: DeepPartial<User>[] = [
-  { id: "1", name: "Testov Testovic", shortBio: "I was born.", isVerified: false },
-  { id: "2", name: "Abe Betov", shortBio: "I also born.", isVerified: false },
-  { id: "3", name: "Cesar Julio", shortBio: "I later born.", isVerified: true },
-];
+const USERS_COUNT = 100;
+const BATCH_SIZE = 100;
 
-for (const user of users) {
-  user.photoUrl = `https://avatars.dicebear.com/api/human/${user.id}.svg`;
+const users: DeepPartial<User>[] = [];
+
+let nextId: number = 0;
+for (let i = 0; i < USERS_COUNT; i++) {
+  users.push({
+    id: nextId.toString(),
+    name: faker.name.findName(),
+    shortBio: faker.lorem.paragraph(),
+    isVerified: faker.random.boolean(),
+    photoUrl: `https://avatars.dicebear.com/api/human/${nextId}.svg`,
+  });
+  nextId++;
 }
 
 const seed = async () => {
-  try {
-    console.log("[seed] : running...");
+  console.log("[seed] : running...");
 
-    const db = await connectDatabase();
-    await db.users.clear();
-    await db.users.save(users);
+  const db = await connectDatabase();
+  await db.users.clear();
 
-    console.log("[seed] : success");
-  } catch {
-    throw new Error("failed to seed database");
+  // Can't insert all users at once: too many SQL parameters.
+  for (let offset = 0; offset < users.length; offset += BATCH_SIZE) {
+    const batch = users.slice(offset, offset + BATCH_SIZE);
+    await db.users.save(batch);
   }
+
+  console.log("[seed] : success");
 };
 
-seed();
+seed().catch(err => {
+  console.error(err.stack);
+  console.error("[seed] : fail")
+});

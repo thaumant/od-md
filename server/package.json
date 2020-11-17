@@ -9,13 +9,15 @@
     "migration:run": "ts-node ./node_modules/.bin/typeorm migration:run"
   },
   "dependencies": {
-    "graphql": "^14.1.1",
+    "@types/faker": "^5.1.4",
     "apollo-server": "^2.9.16",
+    "faker": "^5.1.0",
+    "graphql": "^14.1.1",
+    "node-gyp": "^3.0",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.0",
     "type-graphql": "^0.17.6",
-    "typeorm": "^0.2.22",
-    "node-gyp": "^3.0"
+    "typeorm": "^0.2.22"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
