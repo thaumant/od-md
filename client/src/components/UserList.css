@@ -1,0 +1,23 @@
+.UserList {
+  width: 80%;
+  max-width: 600px;
+  min-width: 200px;
+}
+
+.UserFilters {
+  margin-bottom: 40px;
+}
+
+.UserFilters-query {
+    margin-right: 20px;
+}
+
+.UserFilters-verified {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.UserFilters-nonverified {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
