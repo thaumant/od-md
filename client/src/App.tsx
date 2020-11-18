@@ -12,7 +12,7 @@ const client = new ApolloClient({
       Query: {
         fields: {
           UsersPage: {
-            keyArgs: false,
+            keyArgs: ["isVerified", "query"],
             merge(existing = [], incoming) {
               return [...existing, ...incoming];
             }

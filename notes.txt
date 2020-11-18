@@ -1,0 +1,28 @@
+https://avatars.dicebear.com
+
+
+General improvements:
+    - Setup a monorepo (yarn workspaces) or monolythic (single tsconfig) configuration.
+    - Reuse common types/interfaces between client and server.
+    - Create "scripts" folder, move seed.ts there from "server" folder.
+    - Setup a linter to improve code style consistency.
+    - Add an error popup to the UI in case of a GQL error.
+    - Add reset.css.
+
+
+Concrete improvements:
+    - Add async error handling for main() and seed().
+    - Add graceful shutdown sequence for the Apollo server.
+    - Replace console.log with a logging tool.
+    - Add a linter rule that forbids "any" (right now there is a type error in seeds.ts).
+    - Add a linter rule that forbids "await" with plain values (right now there is a bug in seeds.ts).
+    - Add a linter rule that enforces "key" prop (right now there is an error in UserList.tsx).
+
+
+Challenge feedback:
+    - In readme: describe the toy project in a few words so candidates first see what it is about before diving into how it is implemented.
+    - In readme: replace "yarn run <script>" with "yarn <script>".
+    - Fix the bugs, unles they are intensional:
+        - Fix invalid return type for connectDatabase() in db/index.ts.
+        - Fix invalid async loop in seed.ts.
+        - Fix missing key prop in UserList.
