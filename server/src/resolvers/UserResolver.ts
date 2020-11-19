@@ -2,6 +2,9 @@ import { Resolver, Query, Arg } from "type-graphql";
 import { User } from "../entities/User";
 import { Like, Not, FindOperator, getConnection, getRepository } from "typeorm";
 
+const DEFAULT_TAKE = 10;
+const DEFAULT_SKIP = 0;
+
 @Resolver()
 export class UserResolver {
   @Query(() => [User])
@@ -10,28 +13,28 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-  async UsersPage(
-    @Arg("limit") take: number, 
-    @Arg("offset") skip: number,
+  async UserList(
     @Arg("query", {nullable: true}) query?: string,
     @Arg("isVerified", {nullable: true}) isVerified?: boolean,
+    @Arg("limit", {nullable: true, defaultValue: DEFAULT_TAKE}) take?: number, 
+    @Arg("offset", {nullable: true, defaultValue: DEFAULT_SKIP}) skip?: number,
   ) {
-    let where = [];
-    let vars = {isVerified, query: "%" + (query || "") + "%"};
+    const conditions = [];
+    const variables = {isVerified, query: "%" + (query || "") + "%"};
 
     if (isVerified !== undefined) {
-      where.push("isVerified = :isVerified");
+      conditions.push("isVerified = :isVerified");
     }
     if (query) {
-      where.push("(name LIKE :query OR shortBio LIKE :query)");
+      conditions.push("(name LIKE :query OR shortBio LIKE :query)");
     }
 
     return (
       getRepository(User)
         .createQueryBuilder("user")
-        .where(where.join(" AND "), vars)
-        .take(take)
-        .skip(skip)
+        .where(conditions.join(" AND "), variables)
+        .take(take || DEFAULT_TAKE)
+        .skip(skip || DEFAULT_SKIP)
         .getMany()
     );
   }

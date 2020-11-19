@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { UserList } from './components/UserList';
 
@@ -11,7 +10,7 @@ const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          UsersPage: {
+          UserList: {
             keyArgs: ["isVerified", "query"],
             merge(existing = [], incoming) {
               return [...existing, ...incoming];
@@ -27,7 +26,6 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <img className="App-logo" src={logo} />
         <UserList />
       </div>
     </ApolloProvider>

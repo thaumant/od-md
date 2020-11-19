@@ -3,7 +3,7 @@ import { connectDatabase } from "./index";
 import { User } from '../entities/User';
 import { DeepPartial } from "typeorm";
 
-const USERS_COUNT = 100;
+const USERS_COUNT = 1000;
 const BATCH_SIZE = 100;
 
 const users: DeepPartial<User>[] = [];

@@ -6,7 +6,7 @@ import { UserCard } from './UserCard';
 import './UserList.css';
 
 interface QueryData {
-  UsersPage: User[];
+  UserList: User[];
 }
 
 interface QueryVars {
@@ -27,7 +27,7 @@ const INITIAL_VARIABLES = {
 
 const GET_USERS = gql`
   query GetUsers($limit: Float!, $offset: Float!, $isVerified: Boolean, $query: String) {
-    UsersPage(limit: $limit, offset: $offset, isVerified: $isVerified, query: $query) {
+    UserList(limit: $limit, offset: $offset, isVerified: $isVerified, query: $query) {
       id
       name
       shortBio
@@ -38,19 +38,19 @@ const GET_USERS = gql`
 `;
 
 export function UserList() {
-  const [limit, setLimit] = useState<number>(PAGE_SIZE);
+  const [offset, setOffset] = useState<number>(PAGE_SIZE);
   const [isVerified, setVerified] = useState<boolean | undefined>(undefined);
   const [query, setQuery] = useState<string | undefined>(undefined);
   const bottomRef = useRef<HTMLDivElement>(null);
   const observerRef: React.MutableRefObject<IntersectionObserver | null> = useRef(null);
   const { data, fetchMore, refetch } = useQuery<QueryData, QueryVars>(GET_USERS, {variables: {...INITIAL_VARIABLES, isVerified, query}});
-  const users = data?.UsersPage || [];
+  const users = data?.UserList || [];
 
   useEffect(() => {
     const bottomElem = bottomRef.current;
     if (bottomElem && !observerRef.current) {
       const observer = new IntersectionObserver(() => {
-        setLimit(limit => limit + PAGE_SIZE);
+        setOffset(offset => offset + PAGE_SIZE);
       }, {threshold: 0});
       observer.observe(bottomElem);
       observerRef.current = observer;
@@ -62,18 +62,20 @@ export function UserList() {
   }, []);
 
   useEffect(() => {
-    if (limit === PAGE_SIZE) return;
-    fetchMore({variables: {limit: PAGE_SIZE, offset: limit - PAGE_SIZE, isVerified, query}});
-  }, [limit, isVerified, query]);
+    if (!offset) return;
+    fetchMore({variables: {limit: PAGE_SIZE, offset, isVerified, query}});
+  }, [offset, isVerified, query]);
 
   function handleVerifiedSwitch(val: boolean): void {
     const newVerified = isVerified === val ? undefined : val;
+    setOffset(0);
     setVerified(newVerified);
     refetch({...INITIAL_VARIABLES, isVerified: newVerified, query});
   }
 
   function handleQueryChange(val: string) {
     const newQuery = val || undefined;
+    setOffset(0);
     setQuery(newQuery);
     refetch({...INITIAL_VARIABLES, isVerified, query: newQuery});
   }
